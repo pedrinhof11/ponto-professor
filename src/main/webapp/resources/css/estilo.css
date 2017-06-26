@@ -1,0 +1,65 @@
+.header{
+	background-color: #38c !important;
+    border-color: #ddd !important;
+    color: #fff !important;
+    text-shadow: none !important;
+}
+
+.ui-field-contain {
+    border-bottom-width: 0 !important;
+}
+
+input:hover, a:hover, button:hover, select:hover {
+	text-shadow: none !important;
+	box-shadow: none !important;
+} 
+
+.ui-shadow-inset, .ui-shadow {
+	box-shadow: none !important;
+}
+
+
+.ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
+	background: #fff !important;
+}
+
+.login-box{
+	margin-top:10%;
+	background-color: #f4f4f4;
+	padding: 1em;
+	border-radius: 8px;
+}
+
+
+.form-box{
+	background-color: #f4f4f4;
+	padding: 1em;
+	border-radius: 8px;
+}
+
+.center{
+	text-align: center;
+}
+
+.img-login{
+	width: 100px;
+}
+
+.btn-active {
+    background-color: #38c !important;
+    border-color: #38c !important;
+    color: #fff !important;
+    text-shadow: 0 1px 0 #059 !important;
+}
+
+.btn-blue {
+    background-color: #08b !important;
+    border-color: #ddd !important;
+    color: #fff !important;
+    text-shadow: none !important;
+}
+
+.btn-blue:hover {
+    background-color: #069 !important;
+
+}

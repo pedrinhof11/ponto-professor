@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile">
+
+<f:view renderKitId="PRIMEFACES_MOBILE" />
+
+<h:head>
+	<meta charset="UTF-8" />
+	<h:outputStylesheet library="css" name="estilo.css" />
+</h:head>
+<h:body>
+
+	<!-- Page Login -->
+	<pm:page id="login">
+		<pm:header title="Ponto Professor" styleClass="header"></pm:header>
+		<pm:content>
+			<div class="login-box">
+				<h:form>
+					<p:growl id="growl" globalOnly="true" />
+
+					<div class="center">
+						<p:graphicImage library="images" styleClass="img-login"
+							name="login (2).png" />
+					</div>
+
+					<pm:field id="fieldLogin">
+						<p:inputText id="login" value="#{registroBean.login}"
+							placeholder="Login..." required="true"
+							requiredMessage="Login deve ser informado" />
+						<p:message for="login" id="mlogin" />
+
+						<p:password id="senha" value="#{registroBean.senha}"
+							placeholder="Senha..." required="true"
+							requiredMessage="Senha deve ser informada" />
+						<p:message for="senha" id="msenha" />
+
+						<p:commandButton action="#{registroBean.autenticar}"
+							value="Entrar" icon="ui-icon-check" process="@form"
+							update="@form registro horarios" styleClass="ui-btn-a" />
+					</pm:field>
+
+				</h:form>
+			</div>
+		</pm:content>
+	</pm:page>
+
+	<!-- Page Registro -->
+	<pm:page id="registro" lazy="true">
+		<pm:header title="Ponto Professor" styleClass="header">
+			<h:form>
+				<p:commandButton action="#{registroBean.sair}" value="Sair"
+					icon="ui-icon-arrow-r "
+					styleClass="ui-btn-right ui-btn-icon-right ui-btn-inline btn-blue"
+					process="@form" update="@form" />
+			</h:form>
+		</pm:header>
+		<pm:content>
+		
+			<p class="center">
+				Olá, <b><h:outputText value="#{professorLogado.nome}" /></b>
+			</p>
+
+			<div class="form-box">
+				<h:form id="form-registro">
+					<p:growl id="growl" globalOnly="true" />
+
+					<pm:field>
+						<div class="center">
+							<p:graphicImage library="images" styleClass="img-login"
+								name="approve.png" />
+							<h4>Registre seu Ponto</h4>
+						</div>
+
+						<p:selectOneMenu id="disciplina"
+							value="#{registroBean.disciplina}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Selecione a Disciplina..."
+								noSelectionOption="true" />
+							<f:selectItems value="#{registroBean.disciplinas}" var="d"
+								itemDescription="#{d.curso.descricao}"
+								itemLabel="#{d.descricao} - #{d.curso.descricao}"
+								itemValue="#{d}" />
+							<p:ajax listener="#{registroBean.listarHorarios}" event="change"
+								update="@form" />
+						</p:selectOneMenu>
+
+						<p:selectOneMenu rendered="#{registroBean.disciplina != null}"
+							id="horario" value="#{registroBean.frequencia.disciplinaHorario}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Selecione a Horario..."
+								noSelectionOption="true" />
+							<f:selectItems value="#{registroBean.horarios}" var="h"
+								itemLabel="#{h.dia.descricao} - #{h.inicio} - #{h.fim}"
+								itemValue="#{h}" />
+							<p:ajax event="change" update="@form" />
+						</p:selectOneMenu>
+
+						<p:inputTextarea id="conteudo"
+							rendered="#{registroBean.frequencia.disciplinaHorario != null}"
+							value="#{registroBean.frequencia.conteudoProgramado}"
+							placeholder="Conteudo Programado:" required="true"
+							requiredMessage="Conteúdo deve ser informado" />
+
+						<p:message for="conteudo" id="mconteudo" />
+
+						<p:commandButton
+							rendered="#{registroBean.frequencia.disciplinaHorario != null}"
+							value="Registrar" actionListener="#{registroBean.registrar}"
+							update="@form" process="@form" icon="ui-icon-check" />
+					</pm:field>
+				</h:form>
+			</div>
+
+		</pm:content>
+		<pm:footer fixed="true" title="Registro">
+			<h:form>
+				<p:tabMenu activeIndex="0">
+					<p:menuitem update="@all" value="Registro" icon="ui-icon-edit"
+						styleClass="btn-active" outcome="pm:registro?transition=slide"
+						iconPos="top" />
+					<p:menuitem update="@all" value="Horarios" icon="ui-icon-clock"
+						outcome="pm:horarios?transition=fade" iconPos="top" />
+				</p:tabMenu>
+			</h:form>
+		</pm:footer>
+	</pm:page>
+
+	<!-- Page Horarios -->
+	<pm:page id="horarios">
+		<pm:header title="Ponto Professor" styleClass="header">
+			<h:form>
+				<p:commandButton action="#{registroBean.sair}" value="Sair"
+					icon="ui-icon-arrow-r "
+					styleClass="ui-btn-right ui-btn-icon-right ui-btn-inline btn-blue"
+					process="@form" update="@all" />
+			</h:form>
+		</pm:header>
+		<pm:content>
+			<p class="center">
+				<b>Veja seu horário</b>
+			</p>
+			
+			<h:form>
+				<p:dataTable id="tableHorarios" value="#{registroBean.disciplinaHorarios}" var="h" >
+					<p:column headerText="Dia">
+						<h:outputText value="#{h.dia.descricao}" />
+					</p:column>
+					<p:column headerText="Disciplina">
+						<h:outputText value="#{h.disciplina.descricao}" />
+					</p:column>
+					
+					<p:column headerText="Horarios">
+						<h:outputText value="#{h.inicio} - #{h.fim}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+		</pm:content>
+		<pm:footer fixed="true" title="Horários">
+			<h:form>
+				<p:tabMenu activeIndex="1">
+					<p:menuitem update="@all" value="Registro" icon="ui-icon-edit"
+						outcome="pm:registro?transition=slide" iconPos="top" />
+					<p:menuitem update="@all" value="Horarios" icon="ui-icon-clock"
+						styleClass="btn-active" outcome="pm:horarios?transition=slide"
+						iconPos="top" />
+				</p:tabMenu>
+			</h:form>
+		</pm:footer>
+	</pm:page>
+</h:body>
+</html>
